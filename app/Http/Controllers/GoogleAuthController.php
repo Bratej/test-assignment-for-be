@@ -19,6 +19,11 @@ class GoogleAuthController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->user();
+            if (User::where('email', $googleUser->getEmail())->whereNull('google_id')->first()) {
+                return redirect()->route('login')->withErrors([
+                    'email' => 'The email address already exists. Please log in or use a different account.'
+                ]);
+            }
             $user = User::firstOrCreate(
                 [
                     'google_id' => $googleUser->getId(),
@@ -33,7 +38,7 @@ class GoogleAuthController extends Controller
             return redirect()->route('home');
         } catch (\Exception $e) {
             Log::error('Error while logging with Google SSO: ' . $e->getMessage());
-            return redirect()->route('login');
+            return redirect()->route('login')->withErrors();
         }
     }
 }

@@ -37,4 +37,8 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URL', 'http://localhost/auth/google/callback'),
     ],
 
+    'jokes' => [
+        'api_url' => env('JOKES_API_URL', 'https://official-joke-api.appspot.com/random_joke')
+    ]
+
 ];

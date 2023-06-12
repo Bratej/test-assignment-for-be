@@ -58,7 +58,7 @@ class JokeController extends Controller
             ->first();
 
         if ($joke) {
-            return response()->json(new JokeResource($joke));
+            return response()->json([new JokeResource($joke)]);
         }
 
     }
