@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Joke;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class ApiTest extends TestCase
@@ -70,5 +72,24 @@ class ApiTest extends TestCase
                 'The datetime field must match the format Y-m-d H:i:s.'
             ]
         ]);
+    }
+
+    public function testClosestJokeToTheProvidedDateTime()
+    {
+        $oldJoke = Joke::create([
+            'joke_api_id' => 1,
+            'type' => fake()->word(),
+            'setup' => fake()->realText(250),
+            'punchline' => fake()->realText(250),
+        ]);
+        $oldJoke->created_at = now()->subDay();
+        $oldJoke->save();
+        $newJoke = Joke::create($this->testJoke);
+        $datetime = now();
+        $result = Joke::query()
+            ->orderBy(DB::raw("ABS(TIMESTAMPDIFF(SECOND, created_at, '$datetime'))"))
+            ->first();
+
+        $this->assertEquals($newJoke->joke_api_id, $result->joke_api_id);
     }
 }
