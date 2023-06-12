@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class JokeController extends Controller
 {
-    protected $apiUrl = 'https://official-joke-api.appspot.com/random_joke';
     public function fetch()
     {
        try {
@@ -21,7 +20,7 @@ class JokeController extends Controller
                 ->retry(3, 100)
                 ->throw()
                 ->acceptJson()
-                ->get($this->apiUrl);
+                ->get(config('services.jokes.api_url'));
 
             if ($joke = json_decode($response)) {
                 Joke::firstOrCreate(
@@ -61,5 +60,8 @@ class JokeController extends Controller
             return response()->json([new JokeResource($joke)]);
         }
 
+        return  response()->json([
+            'errors' => ['No jokes yet! :(']
+        ]);
     }
 }

@@ -26,7 +26,7 @@ class ApiTest extends TestCase
         ];
     }
 
-    public function testJokeCreation()
+    public function testJokeCreated()
     {
         $joke = Joke::create($this->testJoke);
         $this->assertNotNull($joke->id);
@@ -36,7 +36,7 @@ class ApiTest extends TestCase
         $this->assertEquals($this->testJoke['punchline'], $joke->punchline);
     }
 
-    public function testApiShowSuccess()
+    public function testApiShowJokeSuccess()
     {
         Joke::create($this->testJoke);
         $response = $this->json('GET', '/api/v1/joke', ['datetime' => now()->format('Y-m-d H:i:s')]);
@@ -50,13 +50,24 @@ class ApiTest extends TestCase
         ]);
     }
 
-    public function testApiShowError()
+    public function testApiShowJokeErrorNoDate()
     {
         $response = $this->get('/api/v1/joke');
         $response->assertStatus(422);
         $response->assertJson([
             'errors' => [
                 'The datetime field is required.'
+            ]
+        ]);
+    }
+
+    public function testApiShowJokeErrorWrongDate()
+    {
+        $response = $this->json('GET', '/api/v1/joke', ['datetime' => '2023']);
+        $response->assertStatus(422);
+        $response->assertJson([
+            'errors' => [
+                'The datetime field must match the format Y-m-d H:i:s.'
             ]
         ]);
     }
