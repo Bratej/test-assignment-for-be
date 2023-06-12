@@ -38,7 +38,7 @@ class GoogleAuthController extends Controller
             return redirect()->route('home');
         } catch (\Exception $e) {
             Log::error('Error while logging with Google SSO: ' . $e->getMessage());
-            return redirect()->route('login')->withErrors();
+            return redirect()->route('login');
         }
     }
 }

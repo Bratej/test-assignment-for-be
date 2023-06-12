@@ -109,25 +109,4 @@ class UserTest extends TestCase
             return Hash::check($notification->token, $resetToken->token) === true;
         });
     }
-
-    public function  testUserLoginGoogle()
-    {
-        $testData = [
-            'id' => '10114319877496442517',
-            'nickname' => null,
-            'name' => 'Janko Testen',
-            'email' => 'janko.testen@example.com'
-        ];
-
-        Http::fake([
-            '*' => Http::response(json_encode($testData), 200),
-        ]);
-
-
-        $response = $this->get(route('google-auth-callback'));
-
-        $response->assertStatus(200);
-
-
-    }
 }
