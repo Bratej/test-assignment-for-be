@@ -6,6 +6,10 @@ You must have <a href="https://www.docker.com/products/docker-desktop/">Docker</
 
 Copy the .env.example file to .env, enter the provided GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.
 
+Checkout the develop branch.
+
+    git checkout develop
+
 Install all required packages: 
 
     composer install
