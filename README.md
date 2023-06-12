@@ -2,7 +2,7 @@
 
 ## Installation
 
-You must have <a href="https://www.docker.com/products/docker-desktop/">Docker</a> installed.
+You must have <a href="https://www.docker.com/products/docker-desktop/">Docker</a> installed. PHP 8.1 is required.
 
 Copy the .env.example file to .env, enter the provided GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.
 
