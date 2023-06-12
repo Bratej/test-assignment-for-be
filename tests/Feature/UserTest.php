@@ -8,7 +8,8 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
+use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\User as SocialiteUser;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
@@ -56,6 +57,26 @@ class UserTest extends TestCase
 
         $response->assertRedirect($this->homeRoute);
         $this->assertAuthenticatedAs($this->user);
+    }
+
+    public function testUserCanLoginWithGoogle()
+    {
+        $socialiteUser = new SocialiteUser();
+        $socialiteUser->id = fake()->randomNumber(9);
+        $socialiteUser->name = fake()->name();
+        $socialiteUser->email = fake()->email();
+
+        Socialite::shouldReceive('driver->user')
+            ->andReturn($socialiteUser);
+        $response = $this->get('/auth/google/callback');
+
+        $response->assertRedirect($this->homeRoute);
+        $this->assertAuthenticated();
+
+        $this->assertDatabaseHas('users', [
+            'name' =>  $socialiteUser->name ,
+            'email' => $socialiteUser->email,
+        ]);
     }
 
     public function testUserCannotViewTheLoginFormWhenAuthenticated()
