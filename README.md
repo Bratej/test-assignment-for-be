@@ -14,13 +14,17 @@ Install all required packages:
 
     composer install
 
-Install the Docker containers (takes a bit longer on first run):
+Install the Docker containers, start in background (takes a bit longer on first run):
 
-    ./vendor/bin/sail up
+    ./vendor/bin/sail up -d
 
 Run the database migrations
 
     ./vendor/bin/sail php artisan migrate
+
+Run
+    
+    npm install & npm run build
 
 ## Use
 
